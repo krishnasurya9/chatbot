@@ -6,7 +6,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain_core.prompts import ChatPromptTemplate
 
 # --- API Key setup ---
-google_Key = os.getenv("GOOGLE_API_KEY")  # add this as a secret in Streamlit Cloud
+google_Key = os.getenv("GOOGLE_API_KEY")  # Set this in Streamlit Cloud secrets
 if not google_Key:
     st.error("❌ GOOGLE_API_KEY not found. Please set it in Streamlit secrets.")
 else:
@@ -45,5 +45,9 @@ if prompt := st.chat_input("Ask something, matey..."):
 
     # Format prompt and get response
     formatted_prompt = prompt_template.format_messages(question=prompt)
-    response = conversation.predict(input=fo
+    response = conversation.predict(input=formatted_prompt[0].content)
 
+    # Show bot response
+    with st.chat_message("assistant"):
+        st.markdown(response)
+    st.session_state.messages.append({"role": "assistant", "content": response})
