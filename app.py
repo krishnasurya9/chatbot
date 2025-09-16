@@ -5,21 +5,24 @@ from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 from langchain_core.prompts import ChatPromptTemplate
 
-# --- API Key setup ---
-google_Key = os.getenv("GOOGLE_API_KEY")  # Set this in Streamlit Cloud secrets
-if not google_Key:
-    st.error("❌ GOOGLE_API_KEY not found. Please set it in Streamlit secrets.")
-else:
-    os.environ["GOOGLE_API_KEY"] = google_Key
+# --- Load API Key from Streamlit secrets ---
+google_key = os.getenv("GOOGLE_API_KEY")
+if not google_key:
+    st.error("❌ GOOGLE_API_KEY not found! Please set it in Streamlit Secrets.")
+    st.stop()  # Stop execution if no key
 
-# --- Model Setup ---
+# --- Initialize model with API key (force usage) ---
 model = ChatGoogleGenerativeAI(
-    model="gemini-1.5-flash", temperature=0.7
+    model="gemini-1.5-flash",
+    temperature=0.7,
+    google_api_key=google_key
 )
+
+# --- Conversation memory ---
 memory = ConversationBufferMemory()
 conversation = ConversationChain(llm=model, memory=memory, verbose=True)
 
-# --- Prompt Template (Jack Sparrow style) ---
+# --- Prompt template ---
 prompt_template = ChatPromptTemplate.from_template(
     "You are Captain Jack Sparrow. Answer every question with wit and iconic dialogues. Question: {question}"
 )
@@ -28,7 +31,7 @@ prompt_template = ChatPromptTemplate.from_template(
 st.set_page_config(page_title="Jack Sparrow Chatbot", page_icon="🏴‍☠️")
 st.title("☠️ Captain Jack Sparrow Chatbot")
 
-# Keep chat history
+# Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -39,7 +42,6 @@ for msg in st.session_state.messages:
 
 # User input
 if prompt := st.chat_input("Ask something, matey..."):
-    # Show user input
     st.chat_message("user").markdown(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
 
@@ -47,7 +49,7 @@ if prompt := st.chat_input("Ask something, matey..."):
     formatted_prompt = prompt_template.format_messages(question=prompt)
     response = conversation.predict(input=formatted_prompt[0].content)
 
-    # Show bot response
+    # Display bot response
     with st.chat_message("assistant"):
         st.markdown(response)
     st.session_state.messages.append({"role": "assistant", "content": response})
