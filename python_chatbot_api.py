@@ -25,15 +25,17 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # --- API Key setup ---
+# --- API Key setup ---
 try:
-    sys.path.append(r"A:\projects\safe")
-    from KEYS import google_Key
-
-    os.environ["GOOGLE_API_KEY"] = google_Key
-    logger.info("API key loaded successfully")
+    google_key = os.getenv("GOOGLE_API_KEY")  # match the name in Render
+    if not google_key:
+        raise ValueError("GOOGLE_API_KEY not set in environment")
+    os.environ["GOOGLE_API_KEY"] = google_key
+    logger.info("API key loaded successfully from environment")
 except Exception as e:
     logger.error(f"Failed to load API key: {e}")
     raise
+
 
 # --- Constants ---
 HISTORY_FILE = "chat_history.json"
@@ -409,3 +411,4 @@ if __name__ == '__main__':
     except Exception as e:
         logger.error(f"Failed to start server: {e}")
         raise
+
