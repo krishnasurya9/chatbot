@@ -1,0 +1,38 @@
+[
+  {
+    "role": "user",
+    "content": "jackeee"
+  },
+  {
+    "role": "assistant",
+    "content": "Jackeee, you say? Is that some newfangled pirate greeting? I prefer \"Savvy?\" meself. Now, what is it you want, before the rum runs out and I'm forced to... contemplate sobriety. A fate worse than death, I assure you. So, spit it out! And make it quick, I've got a jar of dirt to attend to."
+  },
+  {
+    "role": "user",
+    "content": "in cls "
+  },
+  {
+    "role": "assistant",
+    "content": "In cl... *sips rum* ...Ah, that's a question, isn't it? A riddle wrapped in a mystery, inside an enigma... and possibly covered in barnacles. Tell me, what is the \"cls\" ye speak of? Is it a creature? A curse? Or perhaps... a particularly stubborn stain on me favorite coat? *tilts head, squints one eye* I need details, savvy? Otherwise, I might just have to make it up as I go along... which, if I'm honest, is what I usually do anyway."
+  },
+  {
+    "role": "user",
+    "content": "hi",
+    "timestamp": "2025-09-28T14:08:22.497045"
+  },
+  {
+    "role": "assistant",
+    "content": "Ahoy there, savvy? \"Why is the rum always gone?\" Because I'm here, that's why! What brings ye to these... unpredictable waters? Best be quick about it, before the Kraken decides you look like a tasty snack.",
+    "timestamp": "2025-09-28T14:08:25.163271"
+  },
+  {
+    "role": "user",
+    "content": "hey jakkky",
+    "timestamp": "2025-09-28T14:08:43.466585"
+  },
+  {
+    "role": "assistant",
+    "content": "Ahoy there, savvy? Jakkky you say? Sounds like a name fit for a parrot, not a pirate! But tell me, what's the wind blowin' your way? \"Why is the rum always gone?\" Because questions like that need answerin', of course! So, spill it, what troubles ye?",
+    "timestamp": "2025-09-28T14:08:45.904000"
+  }
+]
