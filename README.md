@@ -471,7 +471,7 @@ For issues, questions, or feature requests:
 ---
 
 **Last Updated:** October 2025  
-**Maintainer:** [Your Name/Team]  
+**Maintainer:** p krishna surya   
 **Documentation Version:** 2.1.0
 
 ---
