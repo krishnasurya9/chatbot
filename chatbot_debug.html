@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chatbot - Debug Version</title>
+    <title>Coding Assistant - Debug Console</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
         @keyframes bounce {
             0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8,0,1,1); }
             50% { transform: none; animation-timing-function: cubic-bezier(0,0,0.2,1); }
@@ -17,12 +23,28 @@
             0%, 100% { opacity: 1; }
             50% { opacity: .5; }
         }
-        .debug-panel { max-height: 500px; overflow-y: auto; }
-        .log-entry { border-left: 3px solid #e5e7eb; }
+        
+        .debug-panel { 
+            max-height: 500px; 
+            overflow-y: auto;
+        }
+        
+        .log-entry { 
+            border-left: 3px solid #e5e7eb;
+            font-size: 0.75rem;
+        }
         .log-entry.info { border-left-color: #3b82f6; }
         .log-entry.success { border-left-color: #10b981; }
         .log-entry.warning { border-left-color: #f59e0b; }
         .log-entry.error { border-left-color: #ef4444; }
+        
+        .status-dot {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        pre code {
+            font-family: 'JetBrains Mono', monospace;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50">
@@ -30,12 +52,12 @@
     <div class="bg-white border-b border-gray-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                    <span class="text-white font-bold">AI</span>
+                <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-lg">&lt;/&gt;</span>
                 </div>
                 <div>
-                    <h1 class="text-xl font-semibold text-gray-900">AI Chatbot</h1>
-                    <p class="text-sm text-gray-500">Development & Debug Version</p>
+                    <h1 class="text-xl font-semibold text-gray-900">Coding Assistant</h1>
+                    <p class="text-sm text-gray-500">Debug Console • Gemini 2.0 Flash</p>
                 </div>
             </div>
             <div class="flex items-center space-x-4">
@@ -90,10 +112,17 @@
             <div id="messagesContainer" class="flex-1 overflow-y-auto p-4 space-y-4">
                 <div id="welcomeMessage" class="text-center py-12">
                     <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span class="text-2xl">💬</span>
+                        <span class="text-3xl">&lt;/&gt;</span>
                     </div>
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">Welcome to AI Chatbot</h3>
-                    <p class="text-gray-600">Start a conversation by typing a message below.</p>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Welcome to Coding Assistant</h3>
+                    <p class="text-gray-600">Ask me anything about programming, debugging, or code generation.</p>
+                    <div class="flex flex-wrap justify-center gap-2 text-xs mt-4">
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">Python</span>
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded">JavaScript</span>
+                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">APIs</span>
+                        <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded">Debugging</span>
+                        <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded">Code Review</span>
+                    </div>
                     <p class="text-sm text-gray-500 mt-2">Debug features are enabled for development.</p>
                 </div>
             </div>
@@ -104,7 +133,7 @@
                     <div class="flex-1">
                         <textarea 
                             id="messageInput" 
-                            placeholder="Type your message here..." 
+                            placeholder="Type your coding question here..." 
                             class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             rows="2"
                         ></textarea>
@@ -209,11 +238,10 @@
             };
             
             debugLogs.push(logEntry);
-            if (debugLogs.length > 200) debugLogs.shift(); // Keep last 200 logs
+            if (debugLogs.length > 200) debugLogs.shift();
             
             updateDebugDisplay();
             
-            // Also log to browser console
             const consoleMethod = level === 'error' ? 'error' : level === 'warning' ? 'warn' : 'log';
             console[consoleMethod](`[${level.toUpperCase()}] ${stage ? `[${stage}] ` : ''}${message}`, data || '');
         }
@@ -278,7 +306,6 @@
             connectionStatus = status;
             connectionStatusSpan.textContent = status.charAt(0).toUpperCase() + status.slice(1);
             
-            // Update visual indicators
             statusIndicator.className = `w-2 h-2 rounded-full ${
                 status === 'connected' ? 'bg-green-500' : 
                 status === 'testing' ? 'bg-yellow-500' : 'bg-red-500'
@@ -302,8 +329,7 @@
                 const endpoints = [
                     `${backendUrlInput.value}/health`,
                     `${backendUrlInput.value}/api/health`,
-                    `${backendUrlInput.value}/ping`,
-                    `${backendUrlInput.value}/_stcore/health`
+                    `${backendUrlInput.value}/ping`
                 ];
                 
                 let connected = false;
@@ -326,8 +352,7 @@
                         
                         addDebugLog('info', `Response from ${endpoint}`, {
                             status: response.status,
-                            statusText: response.statusText,
-                            headers: Object.fromEntries(response.headers.entries())
+                            statusText: response.statusText
                         }, 'connection');
                         
                         if (response.ok) {
@@ -412,7 +437,7 @@
                             <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
                             <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
                         </div>
-                        <span class="text-sm text-gray-600">AI is thinking...</span>
+                        <span class="text-sm text-gray-600">Coding Assistant is thinking...</span>
                     </div>
                 </div>
             `;
@@ -450,8 +475,7 @@
                 
                 addDebugLog('info', 'Received response', {
                     status: response.status,
-                    statusText: response.statusText,
-                    headers: Object.fromEntries(response.headers.entries())
+                    statusText: response.statusText
                 }, 'api');
                 
                 if (!response.ok) {
@@ -481,7 +505,6 @@
             sendButton.disabled = true;
             messageInput.disabled = true;
             
-            // Add user message
             addMessage('user', userMessage);
             showLoadingIndicator();
             
@@ -548,7 +571,6 @@
 
         testConnectionButton.addEventListener('click', testConnection);
 
-        // Checkbox event listeners
         autoScrollCheckbox.addEventListener('change', () => {
             addDebugLog('info', `Auto-scroll ${autoScrollCheckbox.checked ? 'enabled' : 'disabled'}`, null, 'ui');
         });
@@ -564,7 +586,7 @@
         });
 
         // Initialize
-        addDebugLog('info', 'Chatbot application initialized', {
+        addDebugLog('info', 'Coding Assistant application initialized', {
             timestamp: new Date().toISOString(),
             userAgent: navigator.userAgent,
             url: window.location.href
@@ -575,5 +597,4 @@
         messageInput.focus();
     </script>
 </body>
-
 </html>
